@@ -1,16 +1,18 @@
 # action.yml
 name: 'Push data to kusto'
 description: 'Action to push data to azure data explorer'
-#inputs:
-#  who-to-greet:  # id of input
-#    description: 'Who to greet'
-#    required: true
-#    default: 'World'
-#outputs:
-#  time: # id of output
-#    description: 'The time we greeted you'
+inputs:
+  name:
+    description: "name"
+    required: true
+outputs:
+  name:
+    description: "Greeting for a passed name"
 runs:
   using: 'docker'
   image: 'Dockerfile'
-#  args:
-#    - ${{ inputs.who-to-greet }}
+  args:
+  - ${{ inputs.name }}
+runs:
+  using: "docker"
+  image: "Dockerfile"
