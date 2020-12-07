@@ -1,5 +1,5 @@
 FROM python:3
-WORKDIR /usr/src/app
-COPY . .
+WORKDIR /app
+COPY . /app
 
 CMD ['python3', 'app.py']
