@@ -60,7 +60,7 @@ def main():
         blobUri = "https://{0}.blob.core.windows.net/{1}/{2}".format(storageAccountName, containerName, fileName)
 
         ingestionClient = KustoIngestClient(kcsb_ingest)
-        ingestionProperties = IngestionProperties(database=databaseName, table=destinationTable, dataFormat=DataFormat.JSON, report_level=ReportLevel.FailuresAndSuccesses)
+        ingestionProperties = IngestionProperties(database=databaseName, table=destinationTable, dataFormat=DataFormat.JSON, ingestionMappingReference='Deployment_mapping' report_level=ReportLevel.FailuresAndSuccesses)
         fileDescriptor = FileDescriptor(filePath, 1000)
         
         print(filePath)
@@ -74,6 +74,30 @@ def main():
 
         print('Done queuing up ingestion with Azure Data Explorer')
         os.remove(filePath)
+
+        qs = KustoIngestStatusQueues(ingestionClient)
+
+        MAX_BACKOFF = 20
+
+        backoff = 1
+        while True:
+            ################### NOTICE ####################
+            # in order to get success status updates,
+            # make sure ingestion properties set the
+            # reportLevel=ReportLevel.FailuresAndSuccesses.
+            if qs.success.is_empty() and qs.failure.is_empty():
+                time.sleep(backoff)
+                backoff = min(backoff * 2, MAX_BACKOFF)
+                print("No new messages. backing off for {} seconds".format(backoff))
+                continue
+
+            backoff = 1
+
+            success_messages = qs.success.pop(10)
+            failure_messages = qs.failure.pop(10)
+
+            pprint.pprint("SUCCESS : {}".format(success_messages))
+            pprint.pprint("FAILURE : {}".format(failure_messages))
     except Exception as e:
         print(e)
 
