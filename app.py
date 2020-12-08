@@ -8,7 +8,7 @@ def main():
     file_name = "sample.txt"
     file_path = os.path.join(os.environ["RUNNER_TEMP"], file_name)
 
-    f = open(file_path, "x")
+    f = open(file_path, "w+")
     f.write("sample")
     f.close()
 
