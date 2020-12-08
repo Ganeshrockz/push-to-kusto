@@ -9,9 +9,9 @@ def main():
     print(os.environ["GITHUB_WORKSPACE"])
 
     file_name = "sample.txt"
-    file_path = os.path.join(os.environ["RUNNER_TEMP"], file_name)
+    file_path = os.path.join(os.environ["GITHUB_WORKSPACE"], file_name)
 
-    f = open(file_path, "w+")
+    f = open(file_path, "w")
     f.write("sample")
     f.close()
 
