@@ -5,9 +5,9 @@ def main():
 
     my_output = f"Hello {my_input}"
 
+    print(os.environ["RUNNER_TEMP"])
     print(my_output)
 
 
 if __name__ == "__main__":
-    print("Into main")
     main()
