@@ -75,7 +75,7 @@ def main():
         print('Done queuing up ingestion with Azure Data Explorer')
         os.remove(filePath)
 
-        qs = KustoIngestStatusQueues(client)
+        qs = KustoIngestStatusQueues(ingestionClient)
 
         MAX_BACKOFF = 180
 
