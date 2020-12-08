@@ -1,0 +1,1 @@
+Action to push data from local files to Azure Data Explorer
