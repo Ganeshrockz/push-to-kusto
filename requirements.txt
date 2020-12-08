@@ -1,2 +1,3 @@
+azure-storage-blob
 azure-kusto-data
 azure-kusto-ingest==1.0.3
