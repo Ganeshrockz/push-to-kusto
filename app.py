@@ -1,4 +1,5 @@
 import os
+import json
 from azure.storage.blob import BlockBlobService, PublicAccess
 
 def main():
@@ -12,12 +13,15 @@ def main():
         blob_service_client = BlockBlobService(
             account_name=storageAccountName, account_key=storageAccountKey)
 
-        fileName = "test.txt"
+        fileName = "sample.json"
         filePath = os.path.join(os.environ["GITHUB_WORKSPACE"], fileName)
 
-        f = open(filePath, "w")
-        f.write("test string")
-        f.close()
+        deploymentData = {}
+        deploymentData["Id"] = 3
+        deploymentData["DeploymentDetails"] = "{\"clustername\":\"aks-sample\"}"
+
+        with open(filePath, "w") as targetFile:
+            json.dump(deploymentData, targetFile)
 
         blob_service_client.create_blob_from_path(
             containerName, fileName, filePath)
