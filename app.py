@@ -57,7 +57,7 @@ def main():
 
         ingestionClient = KustoIngestClient(kcsb_ingest)
         ingestionProperties = IngestionProperties(database=databaseName, table=destinationTable, dataFormat=DataFormat.JSON)
-        fileDescriptor = BlobDescriptor(blobUri)
+        fileDescriptor = BlobDescriptor(blobUri, 1000)
         
         print(filePath)
 
