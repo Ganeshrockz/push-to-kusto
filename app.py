@@ -60,7 +60,7 @@ def main():
         blobUri = "https://{0}.blob.core.windows.net/{1}/{2}".format(storageAccountName, containerName, fileName)
 
         ingestionClient = KustoIngestClient(kcsb_ingest)
-        ingestionProperties = IngestionProperties(database=databaseName, table=destinationTable, dataFormat=DataFormat.JSON, ingestionMappingReference='Deployment_mapping' report_level=ReportLevel.FailuresAndSuccesses)
+        ingestionProperties = IngestionProperties(database=databaseName, table=destinationTable, dataFormat=DataFormat.JSON, ingestion_mapping_reference='Deployment_mapping', report_level=ReportLevel.FailuresAndSuccesses)
         fileDescriptor = FileDescriptor(filePath, 1000)
         
         print(filePath)
