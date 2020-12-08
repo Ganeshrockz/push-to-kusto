@@ -34,7 +34,7 @@ def main():
         filePath = os.path.join(os.environ["GITHUB_WORKSPACE"], fileName)
 
         deploymentData = {}
-        deploymentData["Id"] = 3
+        deploymentData["Id"] = 13
         deploymentData["DeploymentDetails"] = "{\"clustername\":\"aks-sample\"}"
 
         with open(filePath, "w") as targetFile:
@@ -77,7 +77,7 @@ def main():
 
         qs = KustoIngestStatusQueues(ingestionClient)
 
-        MAX_BACKOFF = 20
+        MAX_BACKOFF = 10
 
         backoff = 1
         while True:
