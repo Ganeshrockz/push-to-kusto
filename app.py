@@ -74,30 +74,6 @@ def main():
 
         print('Done queuing up ingestion with Azure Data Explorer')
         os.remove(filePath)
-
-        qs = KustoIngestStatusQueues(ingestionClient)
-
-        MAX_BACKOFF = 180
-
-        backoff = 1
-        while True:
-            ################### NOTICE ####################
-            # in order to get success status updates,
-            # make sure ingestion properties set the
-            # reportLevel=ReportLevel.FailuresAndSuccesses.
-            if qs.success.is_empty() and qs.failure.is_empty():
-                time.sleep(backoff)
-                backoff = min(backoff * 2, MAX_BACKOFF)
-                print("No new messages. backing off for {} seconds".format(backoff))
-                continue
-
-            backoff = 1
-
-            success_messages = qs.success.pop(10)
-            failure_messages = qs.failure.pop(10)
-
-            pprint.pprint("SUCCESS : {}".format(success_messages))
-            pprint.pprint("FAILURE : {}".format(failure_messages))
     except Exception as e:
         print(e)
 
