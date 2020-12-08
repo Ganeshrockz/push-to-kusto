@@ -1,8 +1,12 @@
 # action.yml
 name: 'Push data to kusto'
 description: 'Action to push data to azure data explorer'
-outputs:
+inputs:
   name:
+    description: "Pass name to receive greeting"
+    required: true
+outputs:
+  greeting:
     description: "Greeting for a passed name"
 runs:
   using: 'docker'
