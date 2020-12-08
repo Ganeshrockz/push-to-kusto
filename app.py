@@ -1,10 +1,10 @@
 import os
 import json
-from azure.storage.blob import BlockBlobService, PublicAccess
 from azure.kusto.data import KustoClient, KustoConnectionStringBuilder
 from azure.kusto.data.exceptions import KustoServiceError
 from azure.kusto.data.helpers import dataframe_from_result_table
 from azure.kusto.ingest import KustoIngestClient, IngestionProperties, FileDescriptor, BlobDescriptor, DataFormat, ReportLevel, ReportMethod
+from azure.storage.blob import BlobClient
 
 def main():
     # Blob inputs
@@ -23,8 +23,8 @@ def main():
 
     try:
         # Create blob client
-        blob_service_client = BlockBlobService(
-           account_name=storageAccountName, account_key=storageAccountKey)
+
+        blob = BlobClient.from_connection_string(conn_str=storageAccountKey, container_name=containerName, blob_name='sample.json')
 
         fileName = "sample.json"
         filePath = os.path.join(os.environ["GITHUB_WORKSPACE"], fileName)
@@ -36,8 +36,8 @@ def main():
         with open(filePath, "w") as targetFile:
             json.dump(deploymentData, targetFile)
 
-        blob_service_client.create_blob_from_path(
-            containerName, fileName, filePath)
+        with open(fileName, "rb") as data:
+            blob.upload_blob(data)
         
         print("Uploaded to blob storage")
 
