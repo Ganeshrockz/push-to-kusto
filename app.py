@@ -5,6 +5,8 @@ def main():
 
     my_output = f"Hello {my_input}"
 
+    print(os.cwd())
+
     file_name = "sample.txt"
     file_path = os.path.join(os.environ["RUNNER_TEMP"], file_name)
 
