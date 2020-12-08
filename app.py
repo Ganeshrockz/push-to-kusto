@@ -23,8 +23,8 @@ def main():
 
     try:
         # Create blob client
-        #blob_service_client = BlockBlobService(
-         #   account_name=storageAccountName, account_key=storageAccountKey)
+        blob_service_client = BlockBlobService(
+           account_name=storageAccountName, account_key=storageAccountKey)
 
         fileName = "sample.json"
         filePath = os.path.join(os.environ["GITHUB_WORKSPACE"], fileName)
@@ -36,10 +36,10 @@ def main():
         with open(filePath, "w") as targetFile:
             json.dump(deploymentData, targetFile)
 
-        #blob_service_client.create_blob_from_path(
-        #    containerName, fileName, filePath)
+        blob_service_client.create_blob_from_path(
+            containerName, fileName, filePath)
         
-        #print("Uploaded to blob storage")
+        print("Uploaded to blob storage")
 
         # Blob creation finished
 
