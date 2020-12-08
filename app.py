@@ -5,7 +5,7 @@ def main():
 
     my_output = f"Hello {my_input}"
 
-    print(f"::set-output name=greeting::{my_output}")
+    print(my_output)
 
 
 if __name__ == "__main__":
