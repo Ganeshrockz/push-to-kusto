@@ -62,7 +62,7 @@ def main():
         print(filePath)
 
         with open(filePath, "r") as targetFile:
-            parsed = json.load(deploymentData, targetFile)
+            parsed = json.load(targetFile)
             print(json.dumps(parsed, indent=2, sort_keys=True))
 
         ingestionClient.ingest_from_file(fileDescriptor, ingestion_properties=ingestionProperties)
