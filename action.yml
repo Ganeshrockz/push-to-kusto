@@ -11,6 +11,27 @@ inputs:
   container:
     description: "Name of the container under the storage account"
     required: true
+  tenantId:
+    description: Tenant Id
+    required: true
+  database:
+    description: Name of the db in kusto
+    required: true
+  clusterName:
+    description: Name of the cluster
+    required: true
+  clusterregion:
+    description: Cluster's region
+    required: true
+  clientId:
+    description: App id of the registered spn
+    required: true
+  clientSecret:
+    description: Client secret for the spn
+    required: true
+  table:
+    description: The table where the data should be ingested
+    required: true
 runs:
   using: 'docker'
   image: 'Dockerfile'
