@@ -1,15 +1,9 @@
 # action.yml
 name: 'Push data to kusto'
 description: 'Action to push data to azure data explorer'
-inputs:
-  name:
-    description: "name"
-    required: true
 outputs:
   name:
     description: "Greeting for a passed name"
 runs:
   using: 'docker'
   image: 'Dockerfile'
-  args:
-  - ${{ inputs.name }}
