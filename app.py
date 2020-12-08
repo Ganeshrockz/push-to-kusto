@@ -59,7 +59,7 @@ def main():
         ingestionProperties = IngestionProperties(database=databaseName, table=destinationTable, dataFormat=DataFormat.JSON, report_level=ReportLevel.FailuresAndSuccesses)
         fileDescriptor = FileDescriptor(filePath, 1000)
         
-        print(fileDescriptor)
+        print(filePath)
 
         with open(filePath, "r") as targetFile:
             parsed = json.load(targetFile)
@@ -70,6 +70,10 @@ def main():
 
         print('Done queuing up ingestion with Azure Data Explorer')
         os.remove(filePath)
+
+        with open(filePath, "r") as targetFile:
+            parsed = json.load(targetFile)
+            print(json.dumps(parsed, indent=2, sort_keys=True))
     except Exception as e:
         print(e)
 
