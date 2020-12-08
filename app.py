@@ -57,9 +57,15 @@ def main():
 
         ingestionClient = KustoIngestClient(kcsb_ingest)
         ingestionProperties = IngestionProperties(database=databaseName, table=destinationTable, dataFormat=DataFormat.JSON)
-       #blobDescriptor = FileDescriptor(filePath)
+        fileDescriptor = FileDescriptor(filePath)
+        
         print(filePath)
-        ingestionClient.ingest_from_file(filePath, ingestion_properties=ingestionProperties)
+
+        with open(filePath, "r") as targetFile:
+            parsed = json.load(deploymentData, targetFile)
+            print(json.dumps(parsed, indent=2, sort_keys=True))
+
+        ingestionClient.ingest_from_file(fileDescriptor, ingestion_properties=ingestionProperties)
 
         print('Done queuing up ingestion with Azure Data Explorer')
         os.remove(filePath)
