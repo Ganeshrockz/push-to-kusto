@@ -40,8 +40,6 @@ def main():
             containerName, fileName, filePath)
         
         print("Uploaded to blob storage")
-        
-        os.remove(filePath)
 
         # Blob creation finished
 
@@ -55,14 +53,15 @@ def main():
         kcsb_ingest = KustoConnectionStringBuilder.with_aad_application_key_authentication(
                         clusterIngestUri, clientId, clientSecret, tenantId)
 
-        blobUri = "https://{0}.blob.core.windows.net/{1}/{2}".format(storageAccountName, containerName, fileName)
+        #blobUri = "https://{0}.blob.core.windows.net/{1}/{2}".format(storageAccountName, containerName, fileName)
 
         ingestionClient = KustoIngestClient(kcsb_ingest)
         ingestionProperties = IngestionProperties(database=databaseName, table=destinationTable, dataFormat=DataFormat.JSON)
-        blobDescriptor = BlobDescriptor(blobUri)
-        ingestionClient.ingest_from_blob(blobDescriptor, ingestion_properties=ingestionProperties)
+        blobDescriptor = FileDescriptor(filePath)
+        ingestionClient.ingest_from_blob(filePath, ingestion_properties=ingestionProperties)
 
         print('Done queuing up ingestion with Azure Data Explorer')
+        os.remove(filePath)
     except Exception as e:
         print(e)
 
