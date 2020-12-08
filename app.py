@@ -26,8 +26,8 @@ def main():
         filePath = os.path.join(os.environ["GITHUB_WORKSPACE"], fileName)
 
         deploymentData = {}
-        deploymentData["Id"] = 13
-        deploymentData["DeploymentDetails"] = "{\"clustername\":\"aks-sample\"}"
+        deploymentData["Id"] = 25
+        deploymentData["DeploymentDetails"] = "{\"clustername\":\"cluster-sample\", \"provider\" : \"GitHub\"}"
 
         with open(filePath, "w") as targetFile:
             json.dump(deploymentData, targetFile)
@@ -57,7 +57,7 @@ def main():
         # Remove the temporary file
         os.remove(filePath)
 
-        # Repeated pinging to wait for success message
+        # Repeated pinging to wait for success/failure message
         qs = KustoIngestStatusQueues(ingestionClient)
 
         # Interval to ping
