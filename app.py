@@ -50,8 +50,10 @@ def main():
         clusterUri = "{0}{1}.{2}.{3}".format(httpsPrefix, clusterName, region, suffixKustoUri)
         clusterIngestUri = "{0}ingest-{1}.{2}.{3}".format(httpsPrefix, clusterName, region, suffixKustoUri)
 
-        kcsb_ingest = KustoConnectionStringBuilder.with_aad_application_key_authentication(
-                        clusterIngestUri, clientId, clientSecret, tenantId)
+        #kcsb_ingest = KustoConnectionStringBuilder.with_aad_application_key_authentication(
+         #               clusterIngestUri, clientId, clientSecret, tenantId)
+
+        kcsb_ingest = KustoConnectionStringBuilder.with_aad_device_authentication(clusterIngestUri, tenantId)
 
         #blobUri = "https://{0}.blob.core.windows.net/{1}/{2}".format(storageAccountName, containerName, fileName)
 
