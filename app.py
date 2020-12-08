@@ -13,7 +13,7 @@ def main():
             account_name=storageAccountName, account_key=storageAccountKey)
 
         fileName = "test.txt"
-        filePath = os.path.join(os.environ["GITHUB_WORKSPACE"], file_name)
+        filePath = os.path.join(os.environ["GITHUB_WORKSPACE"], fileName)
 
         f = open(filePath, "w")
         f.write("test string")
