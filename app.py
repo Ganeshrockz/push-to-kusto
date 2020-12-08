@@ -59,7 +59,7 @@ def main():
         ingestionProperties = IngestionProperties(database=databaseName, table=destinationTable, dataFormat=DataFormat.JSON)
         fileDescriptor = BlobDescriptor(blobUri, 1000)
         
-        print(filePath)
+        print(fileDescriptor)
 
         with open(filePath, "r") as targetFile:
             parsed = json.load(targetFile)
