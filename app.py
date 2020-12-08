@@ -46,7 +46,7 @@ def main():
         # Push blob to kusto
 
         httpsPrefix = "https://"
-        suffixKustoUri = ".kusto.windows.net:443/"
+        suffixKustoUri = "kusto.windows.net:443/"
         clusterUri = "{0}{1}.{2}.{3}".format(httpsPrefix, clusterName, region, suffixKustoUri)
         clusterIngestUri = "{0}ingest-{1}.{2}.{3}".format(httpsPrefix, clusterName, region, suffixKustoUri)
 
