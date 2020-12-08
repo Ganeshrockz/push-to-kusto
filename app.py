@@ -6,6 +6,10 @@ from azure.kusto.data.exceptions import KustoServiceError
 from azure.kusto.data.helpers import dataframe_from_result_table
 from azure.kusto.ingest import KustoIngestClient, IngestionProperties, FileDescriptor, BlobDescriptor, DataFormat, ReportLevel, ReportMethod
 
+import pprint
+import time
+from azure.kusto.ingest.status import KustoIngestStatusQueues
+
 def main():
     # Blob inputs
     storageAccountName = os.environ["INPUT_STORAGEACCOUNT"]
@@ -71,9 +75,29 @@ def main():
         print('Done queuing up ingestion with Azure Data Explorer')
         os.remove(filePath)
 
-        with open(filePath, "r") as targetFile:
-            parsed = json.load(targetFile)
-            print(json.dumps(parsed, indent=2, sort_keys=True))
+        qs = KustoIngestStatusQueues(client)
+
+        MAX_BACKOFF = 180
+
+        backoff = 1
+        while True:
+            ################### NOTICE ####################
+            # in order to get success status updates,
+            # make sure ingestion properties set the
+            # reportLevel=ReportLevel.FailuresAndSuccesses.
+            if qs.success.is_empty() and qs.failure.is_empty():
+                time.sleep(backoff)
+                backoff = min(backoff * 2, MAX_BACKOFF)
+                print("No new messages. backing off for {} seconds".format(backoff))
+                continue
+
+            backoff = 1
+
+            success_messages = qs.success.pop(10)
+            failure_messages = qs.failure.pop(10)
+
+            pprint.pprint("SUCCESS : {}".format(success_messages))
+            pprint.pprint("FAILURE : {}".format(failure_messages))
     except Exception as e:
         print(e)
 
