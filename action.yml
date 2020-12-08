@@ -2,15 +2,6 @@
 name: 'Push data to kusto'
 description: 'Action to push data to azure data explorer'
 inputs:
-  storageaccount:
-    description: "Name of the azure storage account"
-    required: true
-  storageaccountkey:
-    description: "Key of the azure storage account"
-    required: true
-  container:
-    description: "Name of the container under the storage account"
-    required: true
   tenantId:
     description: Tenant Id
     required: true

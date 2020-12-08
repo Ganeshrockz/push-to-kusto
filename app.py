@@ -1,9 +1,6 @@
 import os
 import json
-#from azure.storage.blob import BlockBlobService, PublicAccess
 from azure.kusto.data import KustoClient, KustoConnectionStringBuilder
-from azure.kusto.data.exceptions import KustoServiceError
-from azure.kusto.data.helpers import dataframe_from_result_table
 from azure.kusto.ingest import KustoIngestClient, IngestionProperties, FileDescriptor, BlobDescriptor, DataFormat, ReportLevel, ReportMethod
 
 import pprint
@@ -11,10 +8,6 @@ import time
 from azure.kusto.ingest.status import KustoIngestStatusQueues
 
 def main():
-    # Blob inputs
-    storageAccountName = os.environ["INPUT_STORAGEACCOUNT"]
-    storageAccountKey = os.environ["INPUT_STORAGEACCOUNTKEY"]
-    containerName = os.environ["INPUT_CONTAINER"]
     
     # Kusto cluster inputs
     tenantId = os.environ["INPUT_TENANTID"]
@@ -26,9 +19,8 @@ def main():
     destinationTable = os.environ["INPUT_TABLE"]
 
     try:
-        # Create blob client
-        #blob_service_client = BlockBlobService(
-        #   account_name=storageAccountName, account_key=storageAccountKey)
+
+        # file creation 
 
         fileName = "sample.json"
         filePath = os.path.join(os.environ["GITHUB_WORKSPACE"], fileName)
@@ -40,51 +32,38 @@ def main():
         with open(filePath, "w") as targetFile:
             json.dump(deploymentData, targetFile)
 
-        #blob_service_client.create_blob_from_path(
-         #   containerName, fileName, filePath)
-        
-        #print("Uploaded to blob storage")
-
-        # Blob creation finished
-
-        # Push blob to kusto
+        # cluster client connection and auth
 
         httpsPrefix = "https://"
         suffixKustoUri = "kusto.windows.net:443/"
-        clusterUri = "{0}{1}.{2}.{3}".format(httpsPrefix, clusterName, region, suffixKustoUri)
         clusterIngestUri = "{0}ingest-{1}.{2}.{3}".format(httpsPrefix, clusterName, region, suffixKustoUri)
 
         kcsb_ingest = KustoConnectionStringBuilder.with_aad_application_key_authentication(
                        clusterIngestUri, clientId, clientSecret, tenantId)
 
-        blobUri = "https://{0}.blob.core.windows.net/{1}/{2}".format(storageAccountName, containerName, fileName)
-
+        # Cluster ingestion parameters
         ingestionClient = KustoIngestClient(kcsb_ingest)
         ingestionProperties = IngestionProperties(database=databaseName, table=destinationTable, dataFormat=DataFormat.JSON, ingestion_mapping_reference='Deployment_mapping', report_level=ReportLevel.FailuresAndSuccesses)
         fileDescriptor = FileDescriptor(filePath, 1000)
-        
-        print(filePath)
 
         with open(filePath, "r") as targetFile:
             parsed = json.load(targetFile)
             print(json.dumps(parsed, indent=2, sort_keys=True))
 
-        #ingestionClient.ingest_from_file(fileDescriptor, ingestion_properties=ingestionProperties)
         ingestionClient.ingest_from_file(fileDescriptor, ingestion_properties=ingestionProperties)
 
-        print('Done queuing up ingestion with Azure Data Explorer')
+        print('Queued up ingestion with Azure Data Explorer')
+
+        # Remove the temporary file
         os.remove(filePath)
 
+        # Repeated pinging to wait for success message
         qs = KustoIngestStatusQueues(ingestionClient)
 
-        MAX_BACKOFF = 10
-
+        # Interval to ping
+        MAX_BACKOFF = 5
         backoff = 1
         while True:
-            ################### NOTICE ####################
-            # in order to get success status updates,
-            # make sure ingestion properties set the
-            # reportLevel=ReportLevel.FailuresAndSuccesses.
             if qs.success.is_empty() and qs.failure.is_empty():
                 time.sleep(backoff)
                 backoff = min(backoff * 2, MAX_BACKOFF)
@@ -98,6 +77,7 @@ def main():
 
             pprint.pprint("SUCCESS : {}".format(success_messages))
             pprint.pprint("FAILURE : {}".format(failure_messages))
+            break
     except Exception as e:
         print(e)
 
