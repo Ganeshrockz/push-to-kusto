@@ -2,12 +2,15 @@
 name: 'Push data to kusto'
 description: 'Action to push data to azure data explorer'
 inputs:
-  name:
-    description: "Pass name to receive greeting"
+  storageaccount:
+    description: "Name of the azure storage account"
     required: true
-outputs:
-  greeting:
-    description: "Greeting for a passed name"
+  storageaccountkey:
+    description: "Key of the azure storage account"
+    required: true
+  container:
+    description: "Name of the container under the storage account"
+    required: true
 runs:
   using: 'docker'
   image: 'Dockerfile'
