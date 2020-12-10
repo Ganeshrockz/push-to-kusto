@@ -53,6 +53,10 @@ def main():
 
         ingestionClient.ingest_from_file(fileDescriptor, ingestion_properties=ingestionProperties)
 
+        from datetime import datetime
+
+        print(datetime.now())
+
         print('Queued up ingestion with Azure Data Explorer')
 
         # Remove the temporary file
