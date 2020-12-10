@@ -44,6 +44,8 @@ def main():
         kcsb_ingest = KustoConnectionStringBuilder.with_aad_application_key_authentication(
                        clusterIngestUri, clientId, clientSecret, tenantId)
 
+        print(mapping)
+
         # Cluster ingestion parameters
         ingestionClient = KustoIngestClient(kcsb_ingest)
         ingestionProperties = IngestionProperties(database=databaseName, table=destinationTable, dataFormat=DataFormat.JSON, ingestion_mapping_reference=mapping, report_level=ReportLevel.FailuresAndSuccesses)
@@ -83,7 +85,7 @@ def main():
             pprint.pprint("FAILURE : {}".format(failure_messages))
             break
     except Exception as e:
-        print(e)
+        raise Exception(e)
 
 
 if __name__ == "__main__":
