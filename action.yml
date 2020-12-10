@@ -26,6 +26,9 @@ inputs:
   table:
     description: The table where the data should be ingested
     required: true
+  mapping:
+    description: Mapping of json data to table schema
+    required: true
 runs:
   using: 'docker'
   image: 'Dockerfile'

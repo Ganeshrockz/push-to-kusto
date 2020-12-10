@@ -6,6 +6,7 @@ from azure.kusto.ingest import KustoIngestClient, IngestionProperties, FileDescr
 import pprint
 import time
 from azure.kusto.ingest.status import KustoIngestStatusQueues
+from datetime import datetime
 
 def main():
     
@@ -18,6 +19,7 @@ def main():
     clientId = os.environ["INPUT_CLIENTID"]
     clientSecret = os.environ["INPUT_CLIENTSECRET"]
     destinationTable = os.environ["INPUT_TABLE"]
+    mapping = os.environ['INPUT_MAPPING']
 
     try:
 
@@ -27,7 +29,7 @@ def main():
         filePath = os.path.join(os.environ["GITHUB_WORKSPACE"], fileName)
 
         deploymentData = {}
-        deploymentData["Id"] = 25
+        deploymentData["Timestamp"] = datetime.now()
         deploymentData["DeploymentDetails"] = data
 
         with open(filePath, "w") as targetFile:
@@ -44,18 +46,15 @@ def main():
 
         # Cluster ingestion parameters
         ingestionClient = KustoIngestClient(kcsb_ingest)
-        ingestionProperties = IngestionProperties(database=databaseName, table=destinationTable, dataFormat=DataFormat.JSON, ingestion_mapping_reference='Deployment_mapping', report_level=ReportLevel.FailuresAndSuccesses)
+        ingestionProperties = IngestionProperties(database=databaseName, table=destinationTable, dataFormat=DataFormat.JSON, ingestion_mapping_reference=mapping, report_level=ReportLevel.FailuresAndSuccesses)
         fileDescriptor = FileDescriptor(filePath, 1000)
 
+        print('Payload to dump')
         with open(filePath, "r") as targetFile:
             parsed = json.load(targetFile)
             print(json.dumps(parsed, indent=2, sort_keys=True))
 
         ingestionClient.ingest_from_file(fileDescriptor, ingestion_properties=ingestionProperties)
-
-        from datetime import datetime
-
-        print(datetime.now())
 
         print('Queued up ingestion with Azure Data Explorer')
 
