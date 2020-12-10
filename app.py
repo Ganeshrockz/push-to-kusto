@@ -29,7 +29,7 @@ def main():
         filePath = os.path.join(os.environ["GITHUB_WORKSPACE"], fileName)
 
         deploymentData = {}
-        deploymentData["Timestamp"] = datetime.now()
+        deploymentData["Timestamp"] = str(datetime.now())
         deploymentData["DeploymentDetails"] = data
 
         with open(filePath, "w") as targetFile:
