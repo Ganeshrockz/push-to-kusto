@@ -2,6 +2,9 @@
 name: 'Push data to kusto'
 description: 'Action to push data to azure data explorer'
 inputs:
+  data:
+    description: Data to be pushed to kusto
+    required: true
   tenantId:
     description: Tenant Id
     required: true

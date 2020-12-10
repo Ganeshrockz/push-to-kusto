@@ -10,6 +10,7 @@ from azure.kusto.ingest.status import KustoIngestStatusQueues
 def main():
     
     # Kusto cluster inputs
+    data = os.environ["INPUT_DATA"]
     tenantId = os.environ["INPUT_TENANTID"]
     databaseName = os.environ["INPUT_DATABASE"]
     clusterName = os.environ["INPUT_CLUSTERNAME"]
@@ -27,7 +28,7 @@ def main():
 
         deploymentData = {}
         deploymentData["Id"] = 25
-        deploymentData["DeploymentDetails"] = "{\"clustername\":\"cluster-sample\", \"provider\" : \"GitHub\"}"
+        deploymentData["DeploymentDetails"] = data
 
         with open(filePath, "w") as targetFile:
             json.dump(deploymentData, targetFile)
