@@ -25,15 +25,15 @@ def main():
         print(data)
         # file creation 
 
-        #fileName = "sample.json"
-        #filePath = os.path.join(os.environ["GITHUB_WORKSPACE"], fileName)
+        fileName = "sample.json"
+        filePath = os.path.join(os.environ["GITHUB_WORKSPACE"], fileName)
 
         deploymentData = {}
         deploymentData["Timestamp"] = str(datetime.now())
         deploymentData["DeploymentDetails"] = data
 
-        #with open(filePath, "w") as targetFile:
-         #   json.dump(deploymentData, targetFile)
+        with open(filePath, "w") as targetFile:
+            json.dump(deploymentData, targetFile)
 
         # cluster client connection and auth
 
@@ -52,7 +52,7 @@ def main():
         fileDescriptor = FileDescriptor(data, 1000)
 
         print('Payload to dump')
-        with open(data, "r") as targetFile:
+        with open(filePath, "r") as targetFile:
             parsed = json.load(targetFile)
             print(json.dumps(parsed, indent=2, sort_keys=True))
           
