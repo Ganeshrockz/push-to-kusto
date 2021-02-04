@@ -49,7 +49,7 @@ def main():
         # Cluster ingestion parameters
         ingestionClient = KustoIngestClient(kcsb_ingest)
         ingestionProperties = IngestionProperties(database=databaseName, table=destinationTable, dataFormat=DataFormat.JSON, ingestion_mapping_reference=mapping, report_level=ReportLevel.FailuresAndSuccesses)
-        fileDescriptor = FileDescriptor(data, 1000)
+        fileDescriptor = FileDescriptor(filePath, 1000)
 
         print('Payload to dump')
         with open(filePath, "r") as targetFile:
