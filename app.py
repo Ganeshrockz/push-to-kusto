@@ -25,15 +25,15 @@ def main():
 
         # file creation 
 
-        fileName = "sample.json"
-        filePath = os.path.join(os.environ["GITHUB_WORKSPACE"], fileName)
+        #fileName = "sample.json"
+        #filePath = os.path.join(os.environ["GITHUB_WORKSPACE"], fileName)
 
         deploymentData = {}
         deploymentData["Timestamp"] = str(datetime.now())
         deploymentData["DeploymentDetails"] = data
 
-        with open(filePath, "w") as targetFile:
-            json.dump(deploymentData, targetFile)
+        #with open(filePath, "w") as targetFile:
+         #   json.dump(deploymentData, targetFile)
 
         # cluster client connection and auth
 
@@ -49,10 +49,10 @@ def main():
         # Cluster ingestion parameters
         ingestionClient = KustoIngestClient(kcsb_ingest)
         ingestionProperties = IngestionProperties(database=databaseName, table=destinationTable, dataFormat=DataFormat.JSON, ingestion_mapping_reference=mapping, report_level=ReportLevel.FailuresAndSuccesses)
-        fileDescriptor = FileDescriptor(filePath, 1000)
+        fileDescriptor = FileDescriptor(data, 1000)
 
         print('Payload to dump')
-        with open(filePath, "r") as targetFile:
+        with open(data, "r") as targetFile:
             parsed = json.load(targetFile)
             print(json.dumps(parsed, indent=2, sort_keys=True))
 
@@ -61,7 +61,7 @@ def main():
         print('Queued up ingestion with Azure Data Explorer')
 
         # Remove the temporary file
-        os.remove(filePath)
+        #os.remove(filePath)
 
         # Repeated pinging to wait for success/failure message
         qs = KustoIngestStatusQueues(ingestionClient)
