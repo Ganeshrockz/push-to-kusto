@@ -22,7 +22,7 @@ def main():
     mapping = os.environ['INPUT_MAPPING']
 
     try:
-
+        print(data)
         # file creation 
 
         #fileName = "sample.json"
