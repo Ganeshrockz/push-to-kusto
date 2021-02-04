@@ -55,6 +55,8 @@ def main():
         with open(data, "r") as targetFile:
             parsed = json.load(targetFile)
             print(json.dumps(parsed, indent=2, sort_keys=True))
+          
+        return
 
         ingestionClient.ingest_from_file(fileDescriptor, ingestion_properties=ingestionProperties)
 
