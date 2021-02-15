@@ -62,7 +62,7 @@ def main():
 
         # Remove the temporary file
         os.remove(filePath)
-
+        """
         # Repeated pinging to wait for success/failure message
         qs = KustoIngestStatusQueues(ingestionClient)
 
@@ -84,6 +84,7 @@ def main():
             pprint.pprint("SUCCESS : {}".format(success_messages))
             pprint.pprint("FAILURE : {}".format(failure_messages))
             break
+        """
     except Exception as e:
         raise Exception(e)
 
